@@ -5,6 +5,7 @@ class Tree
     @root = build_tree arr
   end
 
+  #builds a balanced tree of the given values
   def build_tree(arr)
     return nil if arr.empty?
 
@@ -24,24 +25,7 @@ class Tree
     @root.delete(value)
   end
 
-  #iterator definition of level order traversal
-  # def level_order
-  #   q = [@root]
-  #   values = []
-  #   until q.empty?
-  #     level_size = q.length
-  #     level = []
-  #     level_size.times do
-  #       node = q.shift
-  #       level << node.value
-  #       q << node.left unless node.left.nil?
-  #       q << node.right unless node.right.nil?
-  #     end
-  #     block_given? ? yield(q[0]) : values << level
-  #   end
-  #   block_given? ? nil : values
-  # end
-
+  #traverses the tree by level order
   def level_order(root = @root, values = [], level = 0, &block)
     return values unless root
 
@@ -55,6 +39,7 @@ class Tree
     level_order(root.right, values, level + 1, &block)
   end
 
+  #returns the node with given value
   def find(root = @root, value)
     return root if root == value
     root > value ? find(root.left, value) : find(root.right, value)
@@ -73,30 +58,7 @@ class Tree
     end
   end
 
-  # def inorder(root = @root, values = [], &block)
-  #   return root if root.nil?
-  #   inorder2(root.left, values, &block)
-  #   block_given? ? block.call(root) : values << root.value
-  #   inorder2(root.right, values, &block)
-  #   values
-  # end
-
-  # def preorder(root = @root, values = [], &block)
-  #   return root if root.nil?
-  #   block_given? ? yield(root) : values << root.value
-  #   preorder(root.left, values, &block)
-  #   preorder(root.right, values, &block)
-  #   values
-  # end
-
-  # def postorder(root = @root, values = [], &block)
-  #   return root if root.nil?
-  #   postorder(root.left, values, &block)
-  #   postorder(root.right, values, &block)
-  #   block_given? ? yield(root) : values << root.value
-  #   values
-  # end
-
+  #returns number of levels below current node
   def depth(root = @root)
     return 0 unless root
     left_depth = depth(root.left)
@@ -104,6 +66,7 @@ class Tree
     left_depth > right_depth ? left_depth + 1 : right_depth + 1
   end
 
+  #return true if depth of left and right nodes is no more than 1 apart
   def balanced?(root = @root)
     return true unless root
     ld = depth(root.left)
@@ -114,6 +77,7 @@ class Tree
     false
   end
 
+  #builds a new balanced tree
   def rebalance!
     values = inorder
     @root = build_tree(values)
